@@ -77,6 +77,25 @@ module Autoparts
         end
       end
 
+      # returns a hash of required environment variables that each package
+      # needs to be able to run properly. Its helpful when some package
+      # requires:
+      # - env variables to be set
+      # - sourcing commands / libraries from the terminal
+      def package_envs
+	envs = installed.map do |package_name, versions|
+	  package = factory package_name
+	  if package.respond_to? :required_env
+	    package.send :required_env
+	  end
+	end.flatten.compact
+	if envs
+	  envs.uniq
+	else
+	  []
+	end
+      end
+
       def version(val)
         @version = val
       end
@@ -543,6 +562,9 @@ module Autoparts
 
     def information
       tips
+    end
+
+    def required_env # required env for package to function correctly
     end
     # -----
   end
