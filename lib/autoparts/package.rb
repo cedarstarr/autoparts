@@ -425,6 +425,7 @@ module Autoparts
           puts '=> Activating...'
           activate(version)
           symlink_all
+          post_symlink
         end
       rescue => e
         archive_path.unlink if e.kind_of?(VerificationFailedError) && archive_path.exist?
@@ -539,6 +540,9 @@ module Autoparts
     end
 
     def post_install # run post install commands - runs in installed package directory
+    end
+
+    def post_symlink # run post symlink commands - run in installed package directory
     end
 
     def post_uninstall # run post uninstall commands
