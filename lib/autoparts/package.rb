@@ -83,17 +83,17 @@ module Autoparts
       # - env variables to be set
       # - sourcing commands / libraries from the terminal
       def package_envs
-	envs = installed.map do |package_name, versions|
-	  package = factory package_name
-	  if package.respond_to? :required_env
-	    package.send :required_env
-	  end
-	end.flatten.compact
-	if envs
-	  envs.uniq
-	else
-	  []
-	end
+        envs = installed.map do |package_name, versions|
+          package = factory package_name
+          if package.respond_to? :required_env
+            package.send :required_env
+          end
+        end.flatten.compact
+        if envs
+          envs.uniq
+        else
+          []
+        end
       end
 
       def version(val)

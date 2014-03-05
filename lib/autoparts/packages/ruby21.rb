@@ -34,47 +34,47 @@ module Autoparts
       depends_on "chruby"
 
       def compile
-	Dir.chdir(ruby_version) do
-	  args = [
-	    "--prefix=#{prefix_path}"
-	  ]
-	  execute "./configure", *args
-	end
+        Dir.chdir(ruby_version) do
+          args = [
+            "--prefix=#{prefix_path}"
+          ]
+          execute "./configure", *args
+        end
       end
 
       def install
-	Dir.chdir(ruby_version) do
-	  execute "make install"
-	end
+        Dir.chdir(ruby_version) do
+          execute "make install"
+        end
       end
 
       def post_install
-	execute "ln", "-sf", prefix_path, chruby_path
+        execute "ln", "-sf", prefix_path, chruby_path
       end
 
       def post_uninstall
-	FileUtils.rm_rf chruby_path
+        FileUtils.rm_rf chruby_path
       end
 
       def chruby_path
-	get_dependency("chruby").rubies_dir + ruby_version
+        get_dependency("chruby").rubies_dir + ruby_version
       end
 
       def ruby_version
-	"ruby-#{version}"
+        "ruby-#{version}"
       end
 
       def tips
-	<<-EOF.unindent
-	You can switch ruby versions with chruby
-	First, reload chruby definitions
-	  $ eval "$(parts init -)"
-	Then, new ruby version should appear in chruby list
-	  $ chruby
-	And you can switch to the new version
-	  $ chruby new_ruby_version
-	More information about chruby here https://github.com/postmodern/chruby
-	EOF
+        <<-EOF.unindent
+        You can switch ruby versions with chruby
+        First, reload chruby definitions
+          $ eval "$(parts init -)"
+        Then, new ruby version should appear in chruby list
+          $ chruby
+        And you can switch to the new version
+          $ chruby new_ruby_version
+        More information about chruby here https://github.com/postmodern/chruby
+        EOF
       end
     end
   end

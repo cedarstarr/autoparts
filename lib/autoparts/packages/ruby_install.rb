@@ -34,62 +34,62 @@ module Autoparts
       depends_on "chruby"
 
       def install
-	Dir.chdir('ruby-install-0.4.1') do
-	  execute "make", "install", "PREFIX=#{prefix_path}"
-	end
+        Dir.chdir('ruby-install-0.4.1') do
+          execute "make", "install", "PREFIX=#{prefix_path}"
+        end
       end
 
       # setup the directories to store rubies. The actual space for src will
       # only matter when user manually compile it and not using the precompiled
       # binaries
       def post_install
-	execute 'mkdir', '-p', Path.share + "ruby"
-	rubies_dir
-	rubies_src_dir
+        execute 'mkdir', '-p', Path.share + "ruby"
+        rubies_dir
+        rubies_src_dir
       end
 
       def post_symlink
-	FileUtils.rm_rf ruby_install_link
-	File.open(ruby_install_link, "w") { |f| f.write ruby_install_binstub }
-	execute 'chmod', '+x', ruby_install_link
+        FileUtils.rm_rf ruby_install_link
+        File.open(ruby_install_link, "w") { |f| f.write ruby_install_binstub }
+        execute 'chmod', '+x', ruby_install_link
       end
 
       def post_uninstall
-	FileUtils.rm_rf ruby_install_link
+        FileUtils.rm_rf ruby_install_link
       end
 
       def ruby_install_link
-	Path.bin + "ruby-install"
+        Path.bin + "ruby-install"
       end
 
       def rubies_dir
-	get_dependency("chruby").rubies_dir
+        get_dependency("chruby").rubies_dir
       end
 
       def rubies_src_dir
-	path = Path.share + "ruby" + "src"
-	path.mkpath unless path.exist?
-	path
+        path = Path.share + "ruby" + "src"
+        path.mkpath unless path.exist?
+        path
       end
 
       # to have sensible options with autoparts
       def ruby_install_binstub
-	<<-EOF.unindent
-	#!/bin/bash
-	# to have sensible default options with autoparts
-	#{bin_path}/ruby-install --no-install-deps --no-reinstall --src-dir #{rubies_src_dir} --rubies-dir #{rubies_dir} $@
+        <<-EOF.unindent
+        #!/bin/bash
+        # to have sensible default options with autoparts
+        #{bin_path}/ruby-install --no-install-deps --no-reinstall --src-dir #{rubies_src_dir} --rubies-dir #{rubies_dir} $@
 
-	cat << "DOC"
-	If you have just installed a new ruby, you can activate it using chruby.
-	First, reload chruby definitions
-	  $ eval "$(parts init -)"
-	Then, new ruby version should appear in chruby list
-	  $ chruby
-	And you can switch to the new version
-	  $ chruby new_ruby_version
-	More information about chruby here https://github.com/postmodern/chruby
-	DOC
-	EOF
+        cat << "DOC"
+        If you have just installed a new ruby, you can activate it using chruby.
+        First, reload chruby definitions
+          $ eval "$(parts init -)"
+        Then, new ruby version should appear in chruby list
+          $ chruby
+        And you can switch to the new version
+          $ chruby new_ruby_version
+        More information about chruby here https://github.com/postmodern/chruby
+        DOC
+        EOF
       end
     end
   end

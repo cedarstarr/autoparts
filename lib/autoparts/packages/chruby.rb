@@ -32,32 +32,32 @@ module Autoparts
       source_filetype 'tar.gz'
 
       def install
-	Dir.chdir('chruby-0.3.8') do
-	  execute "make", "install", "PREFIX=#{prefix_path}"
-	end
+        Dir.chdir('chruby-0.3.8') do
+          execute "make", "install", "PREFIX=#{prefix_path}"
+        end
       end
 
       def required_env
-	env = ["source #{prefix_path}/share/chruby/chruby.sh"]
-	if rubies_dir.entries.length > 2
-	  env << "export RUBIES=(#{rubies_dir + "*"})"
-	end
-	env
+        env = ["source #{prefix_path}/share/chruby/chruby.sh"]
+        if rubies_dir.entries.length > 2
+          env << "export RUBIES=(#{rubies_dir + "*"})"
+        end
+        env
       end
 
       def tips
-	<<-EOF.unindent
-	You have succesfully installed chruby
+        <<-EOF.unindent
+        You have succesfully installed chruby
 
-	To activate chruby in the current shell:
-	  $ eval "$(parts init -)"
-	EOF
+        To activate chruby in the current shell:
+          $ eval "$(parts init -)"
+        EOF
       end
 
       def rubies_dir
-	p = Path.share + "ruby" + "rubies"
-	p.mkpath unless p.exist?
-	p
+        p = Path.share + "ruby" + "rubies"
+        p.mkpath unless p.exist?
+        p
       end
     end
   end
